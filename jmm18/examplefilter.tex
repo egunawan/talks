@@ -1,0 +1,100 @@
+%!TEX root = main.tex
+\def\myyscale{0.6}
+\def\myxscale{1.1}
+\def\id{id}
+\frametitle{Why order filter (as opposed to order ideal)?}
+
+Consider the % (indecomposable)
+quiver representation $M$ over a field $k$
+
+\vspace{-1mm}
+\begin{tikzpicture}[yscale=\myyscale, xscale=\myxscale, %line join=bevel,
+>=latex, 
+font = \small
+]
+\def\posetedgecolor{red}
+\node(1) at (0,0) {{$k$}}; %{$1$};
+\node(2) at (1,-1) {{$k$}}; %{$2$};
+\node(3) at (2,0) {{$k$}}; %{$3$};
+\node(4) at (3,1) {{$k$}}; % {$4$};
+\node(5) at (4,2) {{$k$}}; % {$5$};
+\node(6) at (5,1) {{$k$}}; % {$6$};
+\node(7) at (6,2) {{$k$}}; % {$7$};
+\node(8) at (7,3) {{$k$}}; % {$8$};
+\node(9) at (8,2) {{$k$}}; % {$9$};
+\node(10) at (9,1) {{$k$}}; % {$10$};
+
+%\node[\posetedgecolor] at (-0.9,0) {$\underline{1}$};
+\draw[->] (2) -- (1) node[\posetedgecolor,pos=0.5,above] {$\id$}; 
+\draw[->]  (2) -- (3) node[\posetedgecolor,pos=0.5,above] {$\id$}; 
+\draw[->] (3) -- (4) node[\posetedgecolor,pos=0.5,above] {$\id$};  
+\draw[->] (4) -- (5) node[\posetedgecolor,pos=0.5,above] {$\id$}; 
+\draw[->] (6) -- (5) node[\posetedgecolor,pos=0.5,above] {$\id$}; 
+\draw[->] (6) -- (7) node[\posetedgecolor,pos=0.5,above] {$\id$};  
+\draw[->] (7) -- (8) node[\posetedgecolor,pos=0.5,above] {$\id$};  
+\draw[->] (9) -- (8) node[\posetedgecolor,pos=0.5,above] {$\id$};  
+\draw[->] (10) -- (9) node[\posetedgecolor,pos=0.5,above] {$\id$}; 
+\end{tikzpicture}
+
+\vspace{-1mm}
+The subrepresentations of $M$ correspond to the order filters of the poset. \\[2mm]
+Examples:   
+
+\vspace{-5mm}
+\begin{tikzpicture}[yscale=\myyscale, xscale=\myxscale, %line join=bevel,
+>=latex, 
+font = \small
+]
+\def\posetedgecolor{red}
+\node(1) at (0,0) {{$0$}}; %{$1$};
+\node(2) at (1,-1) {{$0$}}; %{$2$};
+\node(3) at (2,0) {{$0$}}; %{$3$};
+\node(4) at (3,1) {{$k$}}; % {$4$};
+\node(5) at (4,2) {{$k$}}; % {$5$};
+\node(6) at (5,1) {{$0$}}; % {$6$};
+\node(7) at (6,2) {{$0$}}; % {$7$};
+\node(8) at (7,3) {{$k$}}; % {$8$};
+\node(9) at (8,2) {{$k$}}; % {$9$};
+\node(10) at (9,1) {{$k$}}; % {$10$};
+
+%\node[\posetedgecolor] at (-0.9,0) {$\underline{1}$};
+\draw[->] (2) -- (1) node[\posetedgecolor,pos=0.5,above] {$0$}; 
+\draw[->]  (2) -- (3) node[\posetedgecolor,pos=0.5,above] {$0$}; 
+\draw[->] (3) -- (4) node[\posetedgecolor,pos=0.5,above] {$0$};  
+\draw[->] (4) -- (5) node[\posetedgecolor,pos=0.5,above] {$\id$}; 
+\draw[->] (6) -- (5) node[\posetedgecolor,pos=0.5,above] {$0$}; 
+\draw[->] (6) -- (7) node[\posetedgecolor,pos=0.5,above] {$0$};  
+\draw[->] (7) -- (8) node[\posetedgecolor,pos=0.5,above] {$0$};  
+\draw[->] (9) -- (8) node[\posetedgecolor,pos=0.5,above] {$\id$};  
+\draw[->] (10) -- (9) node[\posetedgecolor,pos=0.5,above] {$\id$}; 
+\end{tikzpicture}
+
+\vspace{-11mm}
+
+\begin{tikzpicture}[yscale=\myyscale, xscale=\myxscale, %line join=bevel,
+%>=latex
+font = \small 
+]
+\def\posetedgecolor{red}
+\node(1) at (0,0) {{$k$}}; %{$1$};
+\node(2) at (1,-1) {{$0$}}; %{$2$};
+\node(3) at (2,0) {{$k$}}; %{$3$};
+\node(4) at (3,1) {{$k$}}; % {$4$};
+\node(5) at (4,2) {{$k$}}; % {$5$};
+\node(6) at (5,1) {{$0$}}; % {$6$};
+\node(7) at (6,2) {{$k$}}; % {$7$};
+\node(8) at (7,3) {{$k$}}; % {$8$};
+\node(9) at (8,2) {{$k$}}; % {$9$};
+\node(10) at (9,1) {{$0$}}; % {$10$};
+
+%\node[\posetedgecolor] at (-0.9,0) {$\underline{1}$};
+\draw[->] (2) -- (1) node[\posetedgecolor,pos=0.5,above] {$0$}; 
+\draw[->] (2) -- (3) node[\posetedgecolor,pos=0.5,above] {$0$}; 
+\draw[->] (3) -- (4) node[\posetedgecolor,pos=0.5,above] {$\id$};  
+\draw[->] (4) -- (5) node[\posetedgecolor,pos=0.5,above] {$\id$}; 
+\draw[->] (6) -- (5) node[\posetedgecolor,pos=0.5,above] {$0$}; 
+\draw[->] (6) -- (7) node[\posetedgecolor,pos=0.5,above] {$0$};  
+\draw[->] (7) -- (8) node[\posetedgecolor,pos=0.5,above] {$\id$};  
+\draw[->] (9) -- (8) node[\posetedgecolor,pos=0.5,above] {$\id$};  
+\draw[->] (10) -- (9) node[\posetedgecolor,pos=0.5,above] {$0$}; 
+\end{tikzpicture}

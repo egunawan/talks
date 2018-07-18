@@ -1,0 +1,1108 @@
+\documentclass[10pt,english,compress]{beamer}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,calc}
+\usepackage{multicol}
+\usepackage{ifthen}
+
+\defbeamertemplate{footline}{author and frame number}{%
+  \usebeamercolor[fg]{frame number in head/foot}%
+  \usebeamerfont{frame number in head/foot}%
+  \hspace{1em}\insertshortauthor\hfill
+   {\insertshorttitle} -- 
+   JMM 2018 
+    \hfill  %
+  %\insertframenumber/24
+ % \insertframenumber\,/31\,\kern1em\vskip2pt%
+\insertframenumber\,/\,\inserttotalframenumber
+}
+\setbeamertemplate{footline}[author and frame number]{}
+
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
+
+\newcommand\myemph{\textbf}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{furtherdirections}[theorem]{Further Directions}
+
+\newenvironment<>{greenblock}[1]{%
+  \begin{actionenv}#2%
+      \def\insertblocktitle{#1}%
+      \par%
+      \mode<presentation>{%
+        \setbeamercolor{block title}{fg=black,bg=green!20}
+       \setbeamercolor{block body}{fg=black,bg=green!3}
+      % \setbeamercolor{itemize item}{fg=orange!20!black}
+       %\setbeamertemplate{itemize item}[triangle]
+     }%
+      \usebeamertemplate{block begin}}
+    {\par\usebeamertemplate{block end}\end{actionenv}}
+
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=0.7pt] (char) {#1};}}
+\newcommand*\doublecircled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,double,inner sep=0.9pt] (char) {#1};}}
+
+\def\tfblank{$\underline{\phantom{xxxx}}$\quad}
+
+\def\blank#1{\underline{\phantom{#1}}}
+
+%My predefined color
+\definecolor{myblue}{rgb}{0.1,0.15,0.7}
+
+%Set color for Annotations
+\colorlet{annotcol}{myblue!80!black}
+
+%Store coordinates of points
+\newcommand\tikzmark[1]{
+  \tikz[remember picture,overlay] \coordinate (#1);
+  }
+
+%Command to add annotation above
+\newcommand{\noteup}[3][0em,0em]{
+\begin{tikzpicture}[
+  remember picture,
+  overlay]
+\node[draw=annotcol,fill=white,ellipse,very thick,minimum width=2cm] 
+  (mynode) 
+  at ([shift=($({#1})+({0em,+5.5em})$)]{#2.north})
+  {\begin{minipage}{2cm}\centering #3\end{minipage}};
+\draw[annotcol,very thick,->,>=latex]
+  (mynode.south) to[out=-90,in=+90] ([xshift=0.5em,yshift=1.3em]{#2}); 
+\end{tikzpicture}
+}
+
+%Command to add annotation below
+\newcommand{\notedown}[3][0em,0em]{
+\begin{tikzpicture}[
+  remember picture,
+  overlay]
+\node[draw=annotcol,fill=white,ellipse,very thick,minimum width=2cm] 
+  (mynode) 
+  at ([shift=($({#1})+({0em,-4em})$)]{#2.south})
+  {\begin{minipage}{2cm}\centering #3\end{minipage}};
+\draw[annotcol,very thick,->,>=latex]
+  (mynode.north) to[out=90,in=-90] ([xshift=0.5em,yshift=-0.1em]{#2}); 
+\end{tikzpicture}
+}
+
+
+%Beamer Slides
+\begin{document}
+
+\title[Cluster algebras and binary words]{Cluster algebras and binary words}  
+\author[E. Gunawan]
+{{ Emily Gunawan}\\
+ {University of Connecticut}\\
+ \texttt{egunawan.github.io} \\
+} 
+\date{
+Joint Mathematics Meetings -- \\AMS Special Session on Dynamical Algebraic Combinatorics \\
+Saturday, January 13, 2018
+} 
+\frame{\titlepage}
+
+% Abstract: 
+% Cluster algebras, introduced in 2000, are a class of commutative rings with rich combinatorial structure. They are connected to many areas of mathematics and physics, including representation theory, dynamical systems, geometry, and string theory.
+%
+%We establish a connection between cluster algebras from triangulated surfaces and binary words. Given a cluster variable, we associate to it a finite binary word. The subwords of this binary word are in bijection with the terms of the cluster variable. (Received September 25, 2017)
+
+\frame{
+\frametitle{Outline}
+\begin{itemize}
+\item Bijection between binary subwords and order filters of a poset
+\item Bijection between binary subwords and perfect matchings of a snake graph  (terms of a cluster variable)
+\end{itemize}
+}
+
+\frame{
+\frametitle{Binary word}
+
+\begin{definition}
+\begin{itemize}
+\item A \emph{binary word} is a finite sequence of letters belonging to $\{ 0, 1 \}$. 
+{\bf In this talk, consider only words that start with $1$.}
+
+\begin{itemize}
+\item Example: \textcolor{blue}{10100}.
+\end{itemize}
+
+\item A \emph{subword} is a subsequence of a word.
+\begin{itemize}
+\item Example: Some subwords of \textcolor{blue}{10100} are \textcolor{blue}{the empty word}, \textcolor{blue}{11}, \textcolor{blue}{100}, and \textcolor{blue}{itself}.
+\item Non-examples: 10001, 11000 are \emph{not} subwords of \textcolor{blue}{10100}.
+\item Note: Even though \textcolor{blue}{1010} appears twice as a subsequence of \textcolor{blue}{10100}, we treat it as one subword. 
+
+\end{itemize}
+\end{itemize}
+\end{definition}
+}
+
+\frame{
+\frametitle{Subwords of 1011101100} 
+\scriptsize 
+\begin{multicols}{4}
+\begin{enumerate}
+\item \hfill empty
+\item \hfill 1
+\item \hfill 10
+\item \hfill 11
+\item \hfill 100
+\item \hfill 101
+\item \hfill 110
+\item \hfill 111
+\item \hfill 1000
+\item \hfill 1001
+\item \hfill 1010
+\item \hfill 1011
+\item \hfill 1100
+\item \hfill 1101
+\item \hfill 1110
+\item \hfill 1111
+\item \hfill 10000
+\item \hfill 10010
+\item \hfill 10011
+\item \hfill 10100
+\item \hfill 10101
+\item \hfill 10110
+\item \hfill 10111
+\item \hfill 11000
+\item \hfill 11010
+\item \hfill 11011
+\item \hfill 11100
+\item \hfill 11101
+\item \hfill 11110
+\item \hfill 11111
+\item \hfill 100100
+\item \hfill 100110
+\item \hfill 101000
+\item \hfill 101010
+\item \hfill 101011
+\item \hfill 101100
+\item \hfill 101101
+\item \hfill 101110
+\item \hfill 101111
+\item \hfill 110100
+\item \hfill 110110
+\item \hfill 111000
+\item \hfill 111010
+\item \hfill 111011
+\item \hfill 111100
+\item \hfill 111101
+\item \hfill 111110
+\item \hfill 111111
+\item \hfill 1001100
+\item \hfill 1010100
+\item \hfill 1010110
+\item \hfill 1011000
+\item \hfill 1011010
+\item \hfill 1011011
+\item \hfill 1011100
+\item \hfill 1011101
+\item \hfill 1011110
+\item \hfill 1011111
+\item \hfill 1101100
+\item \hfill 1110100
+\item \hfill 1110110
+\item \hfill 1111000
+\item \hfill 1111010
+\item \hfill 1111011
+\item \hfill 1111100
+\item \hfill 1111110
+\item \hfill 10101100
+\item \hfill 10110100
+\item \hfill 10110110
+\item \hfill 10111000
+\item \hfill 10111010
+\item \hfill 10111011
+\item \hfill 10111100
+\item \hfill 10111110
+\item \hfill 11101100
+\item \hfill 11110100
+\item \hfill 11110110
+\item \hfill 11111100
+\item \hfill 101101100
+\item \hfill 101110100
+\item \hfill 101110110
+\item \hfill 101111100
+\item \hfill 111101100
+\item \hfill 1011101100
+\end{enumerate}
+\end{multicols}
+}
+
+\frame{
+\frametitle{Binary word to poset}
+Associate a subword $w=w_1 w_2 \dots w_n$ to the Hasse diagram of a ``line" poset with $n$ elements $V_1,V_2,\dots,V_n$
+by assigning each $w_i$ $(i \geq 2)$ so that 
+
+ $1$ corresponds to %the covering relation 
+\begin{tikzpicture}[scale=0.5,>=latex]
+\draw (-0.4,-0.2) node {$V_{i-1}$};
+\draw (1.2,1.2) node {$V_i$};
+\draw[ultra thick, ->] (0,0) to (1,1);
+\end{tikzpicture}, and
+$0$ corresponds to %the covering relation 
+\begin{tikzpicture}[scale=0.5,>=latex]
+\draw (-0.4,1.4) node {$V_{i-1}$};
+\draw (1.2,-0.4) node {$V_i$};
+\draw[ultra thick, <-] (0,1) to (1,0);
+\end{tikzpicture}.\\[5mm]
+
+Example: $w=\textcolor{blue}{1011101100}$
+
+\begin{tikzpicture}[scale=1.1,%line join=bevel,
+>=latex]
+\def\posetedgecolor{blue}
+\node(1) at (0,0) {\circled{$a$}}; %{$1$};
+\node(2) at (1,-1) {\circled{$b$}}; %{$2$};
+\node(3) at (2,0) {\circled{$c$}}; %{$3$};
+\node(4) at (3,1) {\circled{$d$}}; % {$4$};
+\node(5) at (4,2) {\circled{$e$}}; % {$5$};
+\node(6) at (5,1) {\circled{$f$}}; % {$6$};
+\node(7) at (6,2) {\circled{$g$}}; % {$7$};
+\node(8) at (7,3) {\circled{$h$}}; % {$8$};
+\node(9) at (8,2) {\circled{$i$}}; % {$9$};
+\node(10) at (9,1) {\circled{$j$}}; % {$10$};
+
+\node[\posetedgecolor] at (-0.9,0) {$\underline{1}$};
+\draw[->] (2) -- (1) node[\posetedgecolor,pos=0.5,right,left] {$0$}; 
+\draw[->]  (2) -- (3) node[\posetedgecolor,pos=0.5,right,left] {$1$}; ; 
+\draw[->] (3) -- (4) node[\posetedgecolor,pos=0.5,right,left] {$1$}; ; 
+\draw[->] (4) -- (5) node[\posetedgecolor,pos=0.5,right,left] {$1$}; ;
+\draw[->] (6) -- (5) node[\posetedgecolor,pos=0.5,right,left] {$0$}; ; 
+\draw[->] (6) -- (7) node[\posetedgecolor,pos=0.5,right,left] {$1$}; ; 
+\draw[->] (7) -- (8) node[\posetedgecolor,pos=0.5,right,left] {$1$}; ; 
+\draw[->] (9) -- (8) node[\posetedgecolor,pos=0.5,right,left] {$0$}; ; 
+\draw[->] (10) -- (9)node[\posetedgecolor,pos=0.5,right,left] {$0$}; ;
+\end{tikzpicture}
+}
+
+
+\frame{
+\frametitle{Antichain}
+\def\myxscale{0.99}
+\def\myyscale{0.7}
+An \emph{antichain} of a poset $P$ is a subset of $P$
+such that no $2$ distinct elements are comparable. 
+An antichain:
+
+\vspace{-4mm}
+\begin{tikzpicture}[yscale=\myyscale, xscale=\myxscale, %line join=bevel,
+>=latex
+]
+\def\posetedgecolor{blue}
+\node(1) at (0,0) {{$a$}}; %{$1$};
+\node(2) at (1,-1) {{$b$}}; %{$2$};
+\node(3) at (2,0) {{$c$}}; %{$3$};
+\node(4) at (3,1) {\circled{$d$}}; % {$4$};
+\node(5) at (4,2) {{$e$}}; % {$5$};
+\node(6) at (5,1) {{$f$}}; % {$6$};
+\node(7) at (6,2) {{$g$}}; % {$7$};
+\node(8) at (7,3) {{$h$}}; % {$8$};
+\node(9) at (8,2) {{$i$}}; % {$9$};
+\node(10) at (9,1) {\circled{$j$}}; % {$10$};
+
+\draw[->] (2) -- (1);
+\draw[->] (2) -- (3);
+\draw[->] (3) -- (4);
+\draw[->] (4) -- (5);
+\draw[->] (6) -- (5);
+\draw[->] (6) -- (7);
+\draw[->] (7) -- (8);
+\draw[->] (9) -- (8);
+\draw[->] (10) -- (9);
+\end{tikzpicture}
+
+% end an antichain
+
+% begin not an antichain
+\emph{Not} an antichain:
+\vspace{-5mm}
+\begin{tikzpicture}[yscale=\myyscale, xscale=\myxscale, %line join=bevel,
+>=latex
+]
+\def\posetedgecolor{blue}
+\node(1) at (0,0) {{$a$}}; %{$1$};
+\node(2) at (1,-1) {{$b$}}; %{$2$};
+\node(3) at (2,0) {\circled{$c$}}; %{$3$};
+\node(4) at (3,1) {{$d$}}; % {$4$};
+\node(5) at (4,2) {\circled{$e$}}; % {$5$};
+\node(6) at (5,1) {{$f$}}; % {$6$};
+\node(7) at (6,2) {{$g$}}; % {$7$};
+\node(8) at (7,3) {{$h$}}; % {$8$};
+\node(9) at (8,2) {{$i$}}; % {$9$};
+\node(10) at (9,1) {\circled{$j$}}; % {$10$};
+
+\draw[->] (2) -- (1); 
+\draw[->]  (2) -- (3); 
+\draw[->] (3) -- (4); 
+\draw[->] (4) -- (5); 
+\draw[->] (6) -- (5); 
+\draw[->] (6) -- (7); 
+\draw[->] (7) -- (8); 
+\draw[->] (9) -- (8); 
+\draw[->] (10) -- (9); 
+\end{tikzpicture}
+% end example of not an antichain %
+}
+
+
+\frame{
+\frametitle{Bijection from antichains $A$ to subwords $s$ (G.)}
+The empty antichain is mapped to the empty word.
+Otherwise, map the antichain {\small $A=\{A_1$, $A_2$, $\dots$, $A_r\}$}  %, listed from left-to-right in order. 
+to the following subword of $w$:
+\begin{itemize}
+\item $1$ is the first letter. \textcolor{blue}{$s=1\blank{01101100}$}
+\item The next letters are the (possibly empty) sequence of edge labels between the first element of $P$ and $A_1$. $\textcolor{blue}{s=1\fbox{011}\blank{01100}}$
+\end{itemize}
+\begin{tikzpicture}[yscale=0.47, xscale=1.1, %line join=bevel,
+>=latex,
+%font = \footnotesize
+font = \small
+]
+\def\posetedgecolor{blue}
+\node(1) at (0,0) {{$a$}}; %{$1$};
+\node(2) at (1,-1) {{$b$}}; %{$2$};
+\node(3) at (2,0) {{$c$}}; %{$3$};
+\node(4) at (3,1) {\circled{$d$}}; % {$4$};
+\node(5) at (4,2) {{$e=M_1$}}; % {$5$};
+\node(6) at (5,1) {{$f$}}; % {$6$};
+\node(7) at (6,2) {{$g$}}; % {$7$};
+\node(8) at (7,3) {{$h$}}; % {$8$};
+\node(9) at (8,2) {{$i$}}; % {$9$};
+\node(10) at (9,1) {\circled{$j$}}; % {$10$};
+
+\node[\posetedgecolor] at (-0.3,0) {$\underline{1}$};
+\draw[->] (2) -- (1) node[\posetedgecolor,pos=0.5] {$0$}; 
+\draw[->]  (2) -- (3) node[\posetedgecolor,pos=0.5] {$1$}; 
+\draw[->] (3) -- (4) node[\posetedgecolor,pos=0.5] {$1$};  
+\draw[->] (4) -- (5); %node[\posetedgecolor,pos=0.5,right,left] {$1$}; 
+\draw[->] (6) -- (5) node[\posetedgecolor,pos=0.5] {$0$}; 
+\draw[->] (6) -- (7) node[\posetedgecolor,pos=0.5] {$1$};  
+\draw[->] (7) -- (8) node[\posetedgecolor,pos=0.5] {$1$};  
+\draw[->] (9) -- (8) node[\posetedgecolor,pos=0.5] {$0$};  
+\draw[->] (10) -- (9) node[\posetedgecolor,pos=0.5] {$0$}; 
+\end{tikzpicture}
+\begin{itemize}
+\item If $A$ contains only one element, we are done.
+Otherwise, 
+jump to the first element $M_1$ appearing after $A_1$ which is either minimal or maximal.   
+The elements of $P$ between $A_1$ and $M_1$ (inclusive) are all comparable to $A_1$.
+Since $A$ is an antichain, none of these are in $A$.
+
+\item Record the labels of the edges between $M_1$ and $A_2$. $\textcolor{blue}{s=1011\boxed{01100}}$
+\item Jump to the first element $M_2$ appearing after $A_2$ which is either minimal or maximal. Record the labels of the edges between $M_2$ and $A_3$, and so on.
+\end{itemize}
+}
+
+\frame{
+\frametitle{Bijection from antichains $A$ to subwords $s$ (G.)}
+%Another example with $s=11010$ and 
+Another example: 
+
+The antichain $A=\{ A_1 = \circled{a}, A_2 = \circled{c},  A_3 = \circled{g}, A_4 = \circled{i} \}$ of $P$ 
+
+is mapped to the subword 
+\textcolor{blue}{$s=\underline{1} \, \framebox(7,12){} \, \framebox(10,12){1} \, \framebox(20,12){01} \, \framebox(10,12){0}$} of $w$.
+\vspace{2mm}
+\begin{tikzpicture}[
+%yscale=0.5, xscale=0.99, %line join=bevel,
+>=latex, 
+%font = \small
+]
+\def\posetedgecolor{blue}
+\node(1) at (0,0) {\circled{$a$}}; %{$1$};
+\node(2) at (1,-1) {{$b=M_1$}}; %{$2$};
+\node(3) at (2,0) {\circled{$c$}}; %{$3$};
+\node(4) at (3,1) {{$d$}}; % {$4$};
+\node(5) at (4,2) {{$e=M_2$}}; % {$5$};
+\node(6) at (5,1) {{$f$}}; % {$6$};
+\node(7) at (6,2) {\circled{$g$}}; % {$7$};
+\node(8) at (7,3) {{$h=M_3$}}; % {$8$};
+\node(9) at (8,2) {\circled{$i$}}; % {$9$};
+\node(10) at (9,1) {{$j$}}; % {$10$};
+
+\node[\posetedgecolor] at (-0.9,0) {$\underline{1}$};
+\draw[->] (2) -- (1) ; %node[\posetedgecolor,pos=0.5] {$0$}; 
+\draw[->]  (2) -- (3) node[\posetedgecolor,pos=0.5] {$1$}; 
+\draw[->] (3) -- (4) ; %node[\posetedgecolor,pos=0.5] {$1$};  
+\draw[->] (4) -- (5) ;%node[\posetedgecolor,pos=0.5,right,left] {$1$}; 
+\draw[->] (6) -- (5) node[\posetedgecolor,pos=0.5] {$0$}; 
+\draw[->] (6) -- (7) node[\posetedgecolor,pos=0.5] {$1$};  
+\draw[->] (7) -- (8) ; %node[\posetedgecolor,pos=0.5] {$1$};  
+\draw[->] (9) -- (8) node[\posetedgecolor,pos=0.5] {$0$};  
+\draw[->] (10) -- (9); %node[\posetedgecolor,pos=0.5] {$0$}; 
+\end{tikzpicture}
+}
+
+
+
+\frame{
+\frametitle{Order filter}
+\begin{definition}
+An \emph{order filter} (or dual order ideal) is 
+a subset $F$ of $P$ such that if $t \in F$ and $s \geq t$, then $s \in F$.
+\end{definition}
+\begin{itemize}
+\item Fact: There is a one-to-one correspondence between antichains $A$ and order filters $F$, where $A$ is the set of minimal elements of $F$. \\[2mm]
+
+\item Order filter examples: 
+\end{itemize}
+\vspace{-6mm}
+
+\def\myyscale{0.6}
+\def\myxscale{1.1}
+\begin{tikzpicture}[yscale=\myyscale, xscale=\myxscale, %line join=bevel,
+>=latex, 
+font = \small
+]
+\def\posetedgecolor{blue}
+\node(1) at (0,0) {{$a$}};
+\node(2) at (1,-1) {{$b$}};
+\node(3) at (2,0) {{$c$}};
+\node(4) at (3,1) {\doublecircled{$d$}};
+\node(5) at (4,2) {\circled{$e$}};
+\node(6) at (5,1) {{$f$}};
+\node(7) at (6,2) {{$g$}};
+\node(8) at (7,3) {\circled{$h$}};
+\node(9) at (8,2) {\circled{$i$}};
+\node(10) at (9,1) {\doublecircled{$j$}}; 
+
+\draw[->] (2) -- (1);
+\draw[->]  (2) -- (3);
+\draw[->] (3) -- (4);
+\draw[->] (4) -- (5);
+\draw[->] (6) -- (5);
+\draw[->] (6) -- (7);
+\draw[->] (7) -- (8);
+\draw[->] (9) -- (8);
+\draw[->] (10) -- (9);
+\end{tikzpicture}
+
+\vspace{-7mm}
+
+\begin{tikzpicture}[yscale=\myyscale, xscale=\myxscale, %line join=bevel,
+>=latex, 
+font = \small 
+]
+\def\posetedgecolor{blue}
+\node(1) at (0,0) {\doublecircled{$a$}};
+\node(2) at (1,-1) {{$b$}};
+\node(3) at (2,0) {\doublecircled{$c$}};
+\node(4) at (3,1) {\circled{$d$}};
+\node(5) at (4,2) {\circled{$e$}};
+\node(6) at (5,1) {{$f$}};
+\node(7) at (6,2) {\doublecircled{$g$}};
+\node(8) at (7,3) {\circled{$h$}};
+\node(9) at (8,2) {\doublecircled{$i$}};
+\node(10) at (9,1) {{$j$}};
+
+\draw[->] (2) -- (1);
+\draw[->] (2) -- (3);
+\draw[->] (3) -- (4);
+\draw[->] (4) -- (5);
+\draw[->] (6) -- (5);
+\draw[->] (6) -- (7);
+\draw[->] (7) -- (8);
+\draw[->] (9) -- (8);
+\draw[->] (10) -- (9);
+\end{tikzpicture}
+
+} % end frame
+
+
+\frame{
+
+\input{examplefilter}
+
+}
+
+
+\frame{
+\frametitle{Cluster algebras (Fomin and Zelevinsky, 2000)}
+A \myemph{cluster algebra} is a subring of $\mathbb{Q}(x_1,\dots,x_n)$ with a distinguished set of generators, called \myemph{cluster variables}.\\
+
+\begin{greenblock}{
+Cluster algebras from surfaces %\\ 
+{\footnotesize (Fomin, Shapiro, and Thurston, 2006, etc.)}
+} 
+\vspace{-2mm}
+\begin{itemize}
+\item 
+A Riemann surface $S$ + %finitely many 
+marked points gives rise to a cluster algebra.
+
+\item Starting from a triangulation and initial cluster variables $x_1,\dots,x_n$,
+produce all the other cluster variables by an iterative process called mutation.
+\input{polygon}
+\item
+The cluster variables $\longleftrightarrow$ curves between marked points, called arcs. 
+\end{itemize}
+\end{greenblock}
+
+\vspace{-2mm}
+
+\myemph{Laurent Phenomenon} {\footnotesize (Fomin - Zelevinsky)} and \myemph{positivity} {\footnotesize (Lee - Schiffler, Gross - Hacking - Keel - Kontsevich, 2014, and special cases by others)}: Each cluster variable can be expressed as a Laurent polynomial in $\{x_1, \dots , x_n\}$, that is, as
+\vspace{-2mm}
+\[
+\frac{f(x_1,\dots,x_n)}{x_1^{d_1} \dots x_n^{d_n}},
+\]
+where $f$ is a polynomial with positive coefficients.
+}
+
+\frame{
+\frametitle{Snake graphs}
+\begin{definition}
+A \emph{snake graph} is a connected sequence of square tiles
+\begin{tikzpicture}[scale=.5]
+\draw (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle;
+\end{tikzpicture}.
+To build a snake graph, start with one tile, then glue a new tile to the north or the east of the previous tile.
+\end{definition}
+ 
+\vspace{2mm}
+Example of a snake graph with $10$ tiles: 
+ 
+ % begin snake graph 1011101100 or 2,3,1,2,3
+ \begin{tikzpicture}[scale=0.7]
+ \foreach \x in {0,1,...,2} % bottom row 
+ {
+     \draw (\x + 0, 0) -- (\x+1,0) -- (\x+1,1)-- (\x+0,1) -- cycle;
+ }
+
+\def\y{1}
+ \foreach \x in {2,...,5} % second from bottom row
+ {
+     \draw (\x + 0, \y) -- (\x+1,\y) -- (\x+1,\y+1)-- (\x+0,\y+1) -- cycle;
+ } 
+ 
+\def\y{2}
+ \foreach \x in {5} % third from bottom row
+ {
+     \draw (\x + 0, \y) -- (\x+1,\y) -- (\x+1,\y+1)-- (\x+0,\y+1) -- cycle;
+ }  
+
+\def\y{3}
+\foreach \x in {5,6} % fourth from bottom row
+{
+     \draw (\x + 0, \y) -- (\x+1,\y) -- (\x+1,\y+1)-- (\x+0,\y+1) -- cycle;
+ } 
+ 
+\end{tikzpicture}
+
+\vspace{2mm}
+\begin{itemize}
+\item History: Used by Musiker, Propp, Schiffler, and Williams to study positivity and bases of cluster algebras from surfaces (2005, 2009--10). The theory of abstract snake graph was developed further by {\c{C}anak\c{c}\i}, Lee, and Schiffler (2012--17). 
+\end{itemize}
+} % end frame
+
+
+\frame{
+\frametitle{Sign function}
+\begin{definition}[{\c{C}anak\c{c}\i}, Schiffler]
+A \emph{sign function} on a snake graph $G$ is a map from the set of edges of G to 
+$\{+,-\}$ 
+such that, for every tile of $G$, 
+\begin{itemize}
+\item the north and the west edges have the same sign, 
+\item the south and the east edges have the same sign, and 
+%begins just two tiles, one with positive epsilon and one with negative epsilon
+\vspace{-2mm}
+\begin{center} \begin{tikzpicture}[scale=0.45,font=\scriptsize]
+\def\y{0}
+\def\south{$-$}
+\def\east{$-$}
+\def\north{$+$}
+\def\west{$+$}
+ \foreach \x in {0}
+ {
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,below] {\south} -- (\x+1,\y+1) node [pos=0.5,right] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+ }  
+ 
+\def\south{$+$}
+\def\east{$+$}
+\def\north{$-$}
+\def\west{$-$}
+ \foreach \x in {5}
+ {
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,below] {\south} -- (\x+1,\y+1) node [pos=0.5,right] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+ }   
+\end{tikzpicture} \end{center}
+\vspace{-4mm}
+\item the sign on the north edge is opposite to the sign on the south edge.
+\end{itemize} 
+\vspace{-1mm}
+\newcommand\macropositivetile{
+     \def\south{$-$}
+     \def\east{$-$}
+     \def\north{$+$}
+     \def\west{$+$} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macropositivetileBinary{
+     \def\south{$0$}
+     \def\east{$0$}
+     \def\north{$1$}
+     \def\west{$1$} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macronegativetile{
+     \def\south{$+$}
+     \def\east{$+$}
+     \def\north{$-$}
+     \def\west{$-$} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macronegativetileBinary{
+     \def\south{$1$}
+     \def\east{$1$}
+     \def\north{$0$}
+     \def\west{$0$} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+
+% begin snake graph 1011101100 or 2,3,1,2,3
+ \begin{tikzpicture}[scale=0.65,font=\tiny]
+ \foreach \x in {0,1,...,2} % bottom row 
+ {
+%     \draw (\x + 0, 0) -- (\x+1,0) -- (\x+1,1)-- (\x+0,1) -- cycle;
+\def\y{0}
+     \ifthenelse{\x = 0 \OR \x =2}
+     {
+     \macropositivetile
+     }{
+     \macronegativetile
+     }
+ }
+
+\def\y{1}
+ \foreach \x in {2,...,5} % second from bottom row
+ {
+     %\draw (\x + 0, \y) -- (\x+1,\y) -- (\x+1,\y+1)-- (\x+0,\y+1) -- cycle;
+     \ifthenelse{\x = 3 \OR \x =5}
+     {\macropositivetile}{\macronegativetile}
+
+ } 
+ 
+\def\y{2}
+ \foreach \x in {5} % third from bottom row
+ {
+     %\draw (\x + 0, \y) -- (\x+1,\y) -- (\x+1,\y+1)-- (\x+0,\y+1) -- cycle;
+     \macronegativetile
+ }  
+
+\def\y{3}
+\foreach \x in {5,6} % fourth from bottom row
+{
+     %\draw (\x + 0, \y) -- (\x+1,\y) -- (\x+1,\y+1)-- (\x+0,\y+1) -- cycle;
+     \ifthenelse{\x = 5}
+     {\macropositivetile}{\macronegativetile}
+ } 
+ 
+\end{tikzpicture}
+% begin snake graph 1011101100 or 2,3,1,2,3 (with 1 0 signs)
+ \begin{tikzpicture}[scale=0.65,font=\tiny]
+ 
+%       \ifthenelse{2 > 1}% 
+%         {\draw[ultra thick,blue,->] (0,0) -- (1*1,1*1);
+%          \foreach \x in {.0,.1,...,5} \draw[blue] 
+%                                    (1*\x,1*\x-\x*\x) circle (3pt);}{}
+ 
+ \foreach \x in {0,1,...,2} % bottom row 
+ {
+%     \draw (\x + 0, 0) -- (\x+1,0) -- (\x+1,1)-- (\x+0,1) -- cycle;
+\def\y{0}
+     \ifthenelse{\x = 0 \OR \x =2}
+     {
+     \macropositivetileBinary
+     }{
+     \macronegativetileBinary
+     }
+ }
+
+\def\y{1}
+ \foreach \x in {2,...,5} % second from bottom row
+ {
+     %\draw (\x + 0, \y) -- (\x+1,\y) -- (\x+1,\y+1)-- (\x+0,\y+1) -- cycle;
+     \ifthenelse{\x = 3 \OR \x =5}
+     {\macropositivetileBinary}{\macronegativetileBinary}
+
+ } 
+ 
+\def\y{2}
+ \foreach \x in {5} % third from bottom row
+ {
+     %\draw (\x + 0, \y) -- (\x+1,\y) -- (\x+1,\y+1)-- (\x+0,\y+1) -- cycle;
+     \macronegativetileBinary
+ }  
+
+\def\y{3}
+\foreach \x in {5,6} % fourth from bottom row
+{
+     %\draw (\x + 0, \y) -- (\x+1,\y) -- (\x+1,\y+1)-- (\x+0,\y+1) -- cycle;
+     \ifthenelse{\x = 5}
+     {\macropositivetileBinary}{\macronegativetileBinary}
+ } 
+ 
+\end{tikzpicture}
+Note: There are two possible sign functions on $G$.
+
+For convenience, we replace $+$ with $1$ and $-$ with $0$.
+\end{definition}
+
+} % end frame
+
+
+
+\frame{
+\frametitle{Sign Sequence}
+\def\signsequencescale{0.79}
+The sequence of signs of the interior edges corresponds to a binary word.
+
+\newcommand\macropositivetileBinaryFirstTileWestEast{
+     \def\south{}
+     \def\east{\textcolor{blue}{$0$}}
+     \def\north{}
+     \def\west{\underline{$1$}}
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macropositivetileBinaryWestEast{
+     \def\south{}
+     \def\east{\textcolor{blue}{$0$}}
+     \def\north{}
+     \def\west{\textcolor{blue}{$1$}} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macropositivetileBinaryWestNorth{
+     \def\south{}
+     \def\east{}
+     \def\north{\textcolor{blue}{$1$}}
+     \def\west{\textcolor{blue}{$1$}} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macropositivetileBinarySouthEast{
+     \def\south{\textcolor{blue}{$0$}}
+     \def\east{\textcolor{blue}{$0$}}
+     \def\north{}
+     \def\west{} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macropositivetileBinarySouthNorth{
+     \def\south{\textcolor{blue}{$0$}}
+     \def\east{}
+     \def\north{\textcolor{blue}{$1$}}
+     \def\west{} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macronegativetileBinary{
+     \def\south{$1$}
+     \def\east{$1$}
+     \def\north{$0$}
+     \def\west{$0$} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macronegativetileBinaryWestEast{
+     \def\south{}
+     \def\east{\textcolor{blue}{$1$}}
+     \def\north{}
+     \def\west{\textcolor{blue}{$0$}}
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macronegativetileBinaryWestNorth{
+     \def\south{}
+     \def\east{}
+     \def\north{\textcolor{blue}{$0$}}
+     \def\west{\textcolor{blue}{$0$}} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macronegativetileBinarySouthEast{
+     \def\south{\textcolor{blue}{$1$}}
+     \def\east{\textcolor{blue}{$1$}}
+     \def\north{}
+     \def\west{} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macronegativetileBinarySouthNorth{
+     \def\south{\textcolor{blue}{$1$}}
+     \def\east{}
+     \def\north{\textcolor{blue}{$0$}}
+     \def\west{} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macronegativetileBinaryWest{ % for a last tile
+     \def\south{}
+     \def\east{}
+     \def\north{}
+     \def\west{\textcolor{blue}{$0$}} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+
+% begin snake graph 1011101100 or 2,3,1,2,3 (with 1 0 signs in interior)
+ \begin{tikzpicture}[scale=\signsequencescale,font=\small]
+ \foreach \x in {0,1,...,2} % bottom row 
+ {
+\def\y{0}
+     \ifthenelse{\x = 0}{\macropositivetileBinaryFirstTileWestEast}{}
+     \ifthenelse{\x = 1}{\macronegativetileBinaryWestEast}{}
+     \ifthenelse{\x =2}{\macropositivetileBinaryWestNorth}{}
+ }
+
+\def\y{1}
+ \foreach \x in {2,...,5} % second from bottom row
+ {
+     \ifthenelse{\x = 2}
+     {\macronegativetileBinarySouthEast}{}
+     \ifthenelse{\x = 3}
+     {\macropositivetileBinaryWestEast}{}
+     \ifthenelse{\x = 4}
+     {\macronegativetileBinaryWestEast}{}
+     \ifthenelse{\x = 5}
+     {\macropositivetileBinaryWestNorth}{}
+ } 
+ 
+\def\y{2}
+ \foreach \x in {5} % third from bottom row
+ {
+     \macronegativetileBinarySouthNorth
+ }  
+
+\def\y{3}
+\foreach \x in {5,6} % fourth from bottom row
+{
+     \ifthenelse{\x = 5}{\macropositivetileBinarySouthEast}{}
+     \ifthenelse{\x = 6}{\macronegativetileBinaryWest}{}
+ } 
+ 
+\end{tikzpicture}
+Example: the word $\underline{1}\textcolor{blue}{011101100}$.
+} % end frame 
+
+
+\frame{
+\frametitle{Perfect matchings}
+\begin{definition}
+A \emph{matching} of a graph $G$ is a subset of non-adjacent edges of the graph.
+A \emph{perfect matching} of $G$ is a matching where every vertex of $G$ is adjacent to exactly one edge of the matching. 
+
+\input{def_pm_min_and_dk}
+\end{definition}
+
+\begin{theorem}[{\small Musiker, Schiffler, and Williams, 2009--10}]
+Each cluster variable (of a cluster algebra from a surface) can be written as the sum of the weights of all perfect matchings of a certain snake graph. 
+\\
+(Note: this demonstrates that the Laurent polynomial expansion has all positive coefficients).
+\end{theorem}
+} % end frame
+
+
+\frame{
+\frametitle{Bijection from subwords to perfect matchings (G.)}
+\begin{itemize}
+\item 
+Highlight the internal edges of $G$ corresponding to $s$.
+
+Example: $w = 1011101100$ and subword $\textcolor{blue}{s = 101101100}$.
+
+Highlight the edges $\underline{1}\, \underline{0} \, \underline{1} \, \underline{1} \, 1 \, \underline{0} \, \underline{1} \, \underline{1} \, \underline{0} \, \underline{0}$ below.
+
+\item For each path $L$ of consecutive highligted edges, let $\square_L$ be the tile which is north/east of the last edge in $L$. 
+%Example: subword $s = 101101100$.
+\end{itemize}
+
+\newcommand\macrotile[1]{
+     \def\south{}
+     \def\east{}
+     \def\north{}
+     \def\west{} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macropositivetileBinary{
+     \def\south{$0$}
+     \def\east{$0$}
+     \def\north{$1$}
+     \def\west{$1$} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+\newcommand\macropositivetileBinaryWestEast{
+     \def\south{}
+     \def\east{\textcolor{blue}{\circled{$0$}}}
+     \def\north{}
+     \def\west{\textcolor{blue}{\circled{$1$}}}
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5] {\south} -- (\x+1,\y+1) node [pos=0.5] {\east} -- (\x+0,\y+1) node [pos=0.5] {\north} --  (\x + 0, \y)  node [pos=0.5] {\west};
+}
+\newcommand\macropositivetileBinaryEast{
+     \def\south{}
+     \def\east{\textcolor{blue}{\circled{$0$}}}
+     \def\north{}
+     \def\west{{$1$}} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5] {\south} -- (\x+1,\y+1) node [pos=0.5] {\east} -- (\x+0,\y+1) node [pos=0.5] {\north} --  (\x + 0, \y)  node [pos=0.5] {\west};
+}
+\newcommand\macropositivetileBinaryWestNorth{
+     \def\south{}
+     \def\east{}
+     \def\north{\textcolor{blue}{\circled{$1$}}}
+     \def\west{\textcolor{blue}{\circled{$1$}}} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5] {\south} -- (\x+1,\y+1) node [pos=0.5] {\east} -- (\x+0,\y+1) node [pos=0.5] {\north} --  (\x + 0, \y)  node [pos=0.5] {\west};
+}
+\newcommand\macropositivetileBinarySouthEast{
+     \def\south{\textcolor{blue}{\circled{$0$}}}
+     \def\east{\textcolor{blue}{\circled{$0$}}}
+     \def\north{}
+     \def\west{} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5] {\south} -- (\x+1,\y+1) node [pos=0.5] {\east} -- (\x+0,\y+1) node [pos=0.5] {\north} --  (\x + 0, \y)  node [pos=0.5] {\west};
+}
+\newcommand\macropositivetileBinarySouthNorth{
+     \def\south{\textcolor{blue}{\circled{$0$}}}
+     \def\east{}
+     \def\north{\textcolor{blue}{\circled{$1$}}}
+     \def\west{} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5] {\south} -- (\x+1,\y+1) node [pos=0.5] {\east} -- (\x+0,\y+1) node [pos=0.5] {\north} --  (\x + 0, \y)  node [pos=0.5] {\west};
+}
+
+\newcommand\macronegativetileBinary{
+     \def\south{$1$}
+     \def\east{$1$}
+     \def\north{$0$}
+     \def\west{$0$} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5] {\south} -- (\x+1,\y+1) node [pos=0.5] {\east} -- (\x+0,\y+1) node [pos=0.5] {\north} --  (\x + 0, \y)  node [pos=0.5] {\west};
+}
+\newcommand\macronegativetileBinaryWestEast{
+     \def\south{}
+     \def\east{\textcolor{blue}{\circled{$1$}}}
+     \def\north{}
+     \def\west{\textcolor{blue}{\circled{$0$}}}
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5] {\south} -- (\x+1,\y+1) node [pos=0.5] {\east} -- (\x+0,\y+1) node [pos=0.5] {\north} --  (\x + 0, \y)  node [pos=0.5] {\west};
+}
+\newcommand\macronegativetileBinaryWestNorth{
+     \def\south{}
+     \def\east{}
+     \def\north{\textcolor{blue}{\circled{$0$}}}
+     \def\west{\textcolor{blue}{\circled{$0$}}}
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5] {\south} -- (\x+1,\y+1) node [pos=0.5] {\east} -- (\x+0,\y+1) node [pos=0.5] {\north} --  (\x + 0, \y)  node [pos=0.5] {\west};
+}
+\newcommand\macronegativetileBinarySouthEast{
+     \def\south{\textcolor{blue}{\circled{$1$}}}
+     \def\east{\textcolor{blue}{\circled{$1$}}}
+     \def\north{}
+     \def\west{} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5,above] {\south} -- (\x+1,\y+1) node [pos=0.5,left] {\east} -- (\x+0,\y+1) node [pos=0.5,above] {\north} --  (\x + 0, \y)  node [pos=0.5,left] {\west};
+}
+
+\newcommand\macronegativetileBinarySouthNorth{
+     \def\south{\textcolor{blue}{\circled{$1$}}}
+     \def\east{}
+     \def\north{\textcolor{blue}{\circled{$0$}}}
+     \def\west{} 
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5] {\south} -- (\x+1,\y+1) node [pos=0.5] {\east} -- (\x+0,\y+1) node [pos=0.5] {\north} --  (\x + 0, \y)  node [pos=0.5] {\west};
+}
+\newcommand\macronegativetileBinaryWest{ % for a last tile
+     \def\south{}
+     \def\east{}
+     \def\north{}
+     \def\west{\textcolor{blue}{\circled{$0$}}}
+     \draw (\x + 0, \y) --  (\x+1,\y) node [pos=0.5] {\south} -- (\x+1,\y+1) node [pos=0.5] {\east} -- (\x+0,\y+1) node [pos=0.5] {\north} --  (\x + 0, \y)  node [pos=0.5] {\west};
+}
+
+% begin snake graph 1011101100 or 2,3,1,2,3 (with 1 0 signs in interior)
+ \begin{tikzpicture}[scale=0.65,font=\scriptsize]
+ \foreach \x in {0,1,...,2} % bottom row 
+ {
+\def\y{0}
+     \ifthenelse{\x = 0}{\macropositivetileBinaryWestEast}{}
+     \ifthenelse{\x = 1}{\macronegativetileBinaryWestEast}{}
+     \ifthenelse{\x =2}{\macropositivetileBinaryWestNorth}{}
+ }
+
+\def\y{1}
+ \foreach \x in {2,...,5} % second from bottom row
+ {
+     \ifthenelse{\x = 2}
+     {\macrotile{} \draw (\x + 0.5, \y+0.5) node {\boxed{$d$}}; }{}
+     \ifthenelse{\x = 3}
+     {\macropositivetileBinaryEast}{}
+     \ifthenelse{\x = 4}
+     {\macronegativetileBinaryWestEast}{}
+     \ifthenelse{\x = 5}
+     {\macropositivetileBinaryWestNorth}{}
+ } 
+ 
+\def\y{2}
+ \foreach \x in {5} % third from bottom row
+ {
+     \macronegativetileBinarySouthNorth
+ }  
+
+\def\y{3}
+\foreach \x in {5,6} % fourth from bottom row
+{
+     \ifthenelse{\x = 5}{\macropositivetileBinarySouthEast}{}
+     \ifthenelse{\x = 6}{\macronegativetileBinaryWest \draw (\x + 0.5, \y+0.5) node {\boxed{$j$}};}{}
+ } 
+ 
+\end{tikzpicture}
+$\square_{\textcolor{blue}{1011}} = \boxed{d}$ and $\square_{\textcolor{blue}{01100}} = \boxed{j}$
+
+} % end frame
+
+
+
+\frame{
+\frametitle{Bijection from subwords to perfect matchings (G.)}
+\begin{itemize}
+\item 
+Let $P_{\text{min}}$ be the perfect matching which contains the first south edge and only boundary edges.
+\input{minimalmatchingsmall}
+
+\item Let $fil(\square_L)$ be 
+the minimal connected sequence of tiles such that $\square_L \in fil(\square_L)$ and the edges bounding $fil(\square_L)$ not in $P_{\text{min}}$ forms a perfect matching of $fil(\square_L)$.
+
+\item Let $\displaystyle fil(s)= \bigcup_{L} fil(\square_L)$.
+Let $pm(s) = \{$edges bounding $fil(s)\} \ominus P_{\text{min}}$. 
+% symmetric difference
+\end{itemize}
+\input{fil_dk}
+\input{pm_dk}
+
+} % end frame
+
+
+\frame{
+%Another example with $s=11010$ and 
+\input{highlightsubword11010}
+}
+
+\backupbegin
+
+\frame{
+\vfill
+{\Huge Thank you}
+\vfill 
+Comments and suggestions are welcome
+}
+
+
+\frame{
+\frametitle{Example: arc to poset}
+\input{polygon_poset}
+
+Motivation: 
+\begin{theorem}[\small Musiker, Schiffler, and Williams, 2011]
+The order filters of $Q_\gamma$ are in bijection with the terms of the cluster variable expansion of $x_\gamma$ with respect to $x_a$, $x_b$, and $x_c$ 
+(where the set of elements of each order filter corresponds to a term in the $F$-polynomial). 
+\end{theorem}
+}
+
+\backupend
+
+\end{document}
