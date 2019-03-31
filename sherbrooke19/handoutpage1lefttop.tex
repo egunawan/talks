@@ -1,0 +1,226 @@
+\documentclass[orientation=portrait]{beamer}
+\beamertemplatenavigationsymbolsempty
+
+%\mode<presentation> {\usecolortheme{rose}
+%}
+
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+\usepackage[all]{xy} % to use xymatrix
+
+\usepackage{mathtools} % to put labels above leftrightarrow
+
+\usepackage{collectbox}
+
+\makeatletter
+\newcommand{\mybox}{%
+    \collectbox{%
+        \setlength{\fboxsep}{1pt}%
+        \fbox{\BOXCONTENT}%
+    }%
+}
+\makeatother
+
+
+\defbeamertemplate{footline}{author and frame number}{%
+  \usebeamercolor[fg]{frame number in head/foot}%
+  \usebeamerfont{frame number in head/foot}%
+  \hspace{1em}\insertshortauthor\hfill%
+%  \insertframenumber / 20
+ % \insertframenumber\,/31\,\kern1em\vskip2pt%
+% \insertframenumber\,/\,\inserttotalframenumber
+}
+\setbeamertemplate{footline}[author and frame number]{}
+
+%%%%%%%%%%%%%
+%%%%%%%% shortcuts %%%
+
+% \definecolor{myblue}{cmyk}{1.00,0.56,0.00,0.34}
+\definecolor{mygreen}{cmyk}{0.5,0,0.5,0.5}
+% \definecolor{myred}{cmyk}{0.00,1.00,0.63,0.00}
+% \definecolor{myyellow}{cmyk}{0.00,0.15,1.00,0.00}
+
+
+%\newcommand\puncture{\text{\tiny $P$}}
+%
+%\newcommand \al {\alpha} \newcommand \be {\beta}
+%\newcommand\ga{\gamma}  \newcommand\Ga{\Gamma}
+%\newcommand\ta{\tau } \newcommand\si{\sigma}  \newcommand\Si{\Sigma} 
+%\newcommand \om {w} \newcommand \oom {$w$}
+%\newcommand\Cn{\mathcal{C}_n}
+%\renewcommand\S{S}
+%\newcommand\Cnn[1]{\mathcal{C}_{#1}}
+%\newcommand\Z{\mathbb{Z}}
+%\newcommand\B{\mathcal B} 
+%\newcommand\AAA {\mathcal A}
+%
+%\newcommand\TikzPunctureActualSize{0.1}
+%\newcommand\TikzPointActualSize{0.07}
+%
+%\newcommand\myemph{\emph}
+
+%%%%% shortcuts %%%%%
+%%%%%%%%%%%%%%%
+
+%%%%%%% TIKZ %%
+\input{slides_figures}  %%%%
+\usetikzlibrary{matrix}
+\tikzset{->-/.style={decoration={
+  markings,
+  mark=at position #1 with {\arrow{stealth}}},postaction={decorate}}}
+ %%%%%% TIKZ %%%
+
+\usetikzlibrary{decorations.pathreplacing,decorations.markings}
+
+\definecolor{myblue}{cmyk}{1.00,0.56,0.00,0.34}
+\definecolor{mygreen}{cmyk}{0.5,0,0.5,0.5}
+\definecolor{myred}{cmyk}{0.00,1.00,0.63,0.00}
+
+\tikzset{
+  % style to apply some styles to each segment of a path
+  on each segment/.style={
+    decorate,
+    decoration={
+      show path construction,
+      moveto code={},
+      lineto code={
+        \path [#1]
+        (\tikzinputsegmentfirst) -- (\tikzinputsegmentlast);
+      },
+      curveto code={
+        \path [#1] (\tikzinputsegmentfirst)
+        .. controls
+        (\tikzinputsegmentsupporta) and (\tikzinputsegmentsupportb)
+        ..
+        (\tikzinputsegmentlast);
+      },
+      closepath code={
+        \path [#1]
+        (\tikzinputsegmentfirst) -- (\tikzinputsegmentlast);
+      },
+    },
+  },
+  % style to add an arrow in the middle of a path
+  mid arrow/.style={postaction={decorate,decoration={
+        markings,
+        mark=at position .5 with {\arrow[#1]{stealth}}
+      }}},
+}
+
+% Macro for drawing a heptagon   
+\def\penta{\draw(A) -- (B) -- (C) -- (D) -- (E) -- cycle;}
+
+% Macro for drawing a heptagon   
+\def\hepta{\draw(A) -- (B) -- (C) -- (D) -- (E) -- (F) -- (G) -- cycle;}
+
+\newcommand\bcifill{gray!70}
+
+% Macro for drawing polygon diagonals. 
+% Example \slice{A/C,C/E,E/G,C/G}
+\newcommand{\slice}[1]{%
+    \hepta
+    \draw \foreach \x/\y in {#1} {(\x)--(\y)};
+}
+
+% Macro for drawing polygon diagonals. 
+% Example \slice{A/C,C/E,E/G,C/G}
+\newcommand{\slicepenta}[1]{%
+    \penta
+    \draw \foreach \x/\y in {#1} {(\x)--(\y)};
+}
+% for drawing triangulation on strip
+\def\Prufer#1#2#3#4{
+	\coordinate (x) at (#1,#2);
+	\fill (x) circle (.1);
+	\draw[#4] (x) .. controls (#1,#2+2.5) and (#1+.5,#2+3) .. (#1+#3,#2+3);
+}
+
+\def\adic#1#2#3#4{
+	\coordinate (x) at (#1,#2);
+	\fill (x) circle (.1);
+	\draw[#4] (x) .. controls (#1,#2+2.5) and (#1-.5,#2+3) .. (#1-#3,#2+3);
+}
+
+\def\hadic#1#2#3#4{
+	\coordinate (x) at (#1,#2);
+	\fill (x) circle (.1);
+	\draw[#4] (x) .. controls (#1,#2-2.5) and (#1+.5,#2-3) .. (#1+#3,#2-3);
+}
+
+\def\hPrufer#1#2#3#4{
+	\coordinate (x) at (#1,#2);
+	\fill (x) circle (.1);
+	\draw[#4] (x) .. controls (#1,#2-2.5) and (#1-.5,#2-3) .. (#1-#3,#2-3);
+}
+\newcommand\PruferShort[4]{
+	\coordinate (x) at (#1,#2);
+	\fill (x) circle (.1);
+	\draw[#4] (x) .. controls (#1,#2+4) and (#1+.1,#2+4) .. (#1+#3,#2+3.8);
+}
+
+\newcommand\PruferShortCurvedLeft[4]{
+	\coordinate (x) at (#1,#2);
+	\fill (x) circle (.1);
+	\draw[#4] (x) .. controls (#1,#2+4) and (#1-.1,#2+4) .. (#1-#3,#2+3.8);
+}
+ %%%%%% TIKZ %%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+
+
+\newcommand{\zehn}{\hspace{10pt}}
+\newcommand{\fuenf}{\hspace{5pt}}
+\newcommand{\fuenfm}{\hspace{-5pt}}
+
+
+
+
+
+
+\begin{frame}
+\frametitle{The identity frieze for the type $\mathbb{A}_3$ quiver $Q = 1\rightarrow 2 \leftarrow 3 $}
+%\scriptsize
+\large
+\vskip -2cm
+\[
+\xymatrix@R-10pt@C-20pt{ 
+1 &&
+1 &&
+1 &&
+1 &&
+\\
+&\zehn x_3\zehn   &&
+ \frac{x_1x_3+1+x_2}{x_2x_3}  &&
+ \frac{x_2+1}{x_1}  &&
+ \zehn x_1
+ \zehn \\
+\fuenf x_2\fuenf  &&
+ \frac{x_1x_3+1}{x_2}  &&
+\fuenfm \fuenfm \frac{x_2^2+2x_2+1+x_1x_3}{x_1x_2x_3}\fuenfm\fuenfm  &&
+ \fuenf x_2\fuenf   &&
+\\
+& x_1  &&
+  \frac{x_1x_3+1+x_2}{x_1x_2}  &&
+  \frac{x_2+1}{x_3}  &&
+ x_3 \\
+ 1 &&
+1 &&
+1 &&
+1 &&
+}
+\]
+\end{frame}
+
+
+
+
+
+\end{document}
+
+
