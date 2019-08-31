@@ -1,0 +1,331 @@
+\documentclass{amsart}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz, tikz-cd}
+
+\usepackage[letterpaper]{geometry}
+\geometry{tmargin=1.0in,bmargin=0.2in,lmargin=0.30in,rmargin=0.30in}
+\voffset -0.6in
+
+\usetikzlibrary{matrix,arrows,calc,shapes}
+\usetikzlibrary{decorations.markings}
+
+\usetikzlibrary{matrix}
+\tikzset{->-/.style={decoration={
+  markings,
+  mark=at position #1 with {\arrow{stealth}}},postaction={decorate}}}
+  
+\title{arquiver again}
+\author{emily.gunawan }
+\date{August 2019}
+
+\begin{document}
+% \centering
+
+\input{figquiver6}
+
+\definecolor{mygreen}{cmyk}{0.5,0,0.5,0.5}
+\newcommand\pentascale{0.27}
+\newcommand\myyellow{white}
+\newcommand\mygray{gray}
+\newcommand\myboundaryedge{blue}
+\newcommand\myedgecolor{mygreen}
+\newcommand\myedgesize{ultra thick}
+\tikzset{->-/.style={decoration={
+  markings,
+  mark=at position #1 with {\arrow{stealth}}},postaction={decorate}}}
+
+\newcommand\mypentagon
+ {
+\begin{scope}[opacity=0.8,scale=\pentascale]
+ \node (0) at (0,0) [fill,circle,inner sep=0.5] {};
+ \node (1) at (0.7,1.2) [opacity=1,fill,circle,inner sep=0.5] {};
+ \node (2) at (1.8,1.8) [fill,circle,inner sep=0.5] {};
+ \node (3) at (3,2) [fill,circle,inner sep=0.5]{}; 
+ \node (4) at (4,-1.5) [fill,circle,inner sep=0.5] {};
+ \node (5) at (5,1.8) [fill,circle,inner sep=0.5] {};
+ \node (6) at (6,-1) [fill,circle,inner sep=0.5] {};
+ \node (7) at (6.5,0) [fill,circle,inner sep=0.5] {};
+ \draw (0) -- (1) -- (2) -- (3) -- (5) -- (7)-- (6) -- (4) to [bend left=20] (0);
+ 
+\coordinate (northsource) at (7,2);
+\coordinate (northtarget) at (8.5,3.5);
+\coordinate (southsource) at (7,-2);
+\coordinate (southtarget) at (8.5,-3.5);
+
+\draw (0) node[left] {$0$};
+\draw (1) node[above] {$1$};
+\draw (2) node[above] {$2$};
+\draw (3) node[above] {$3$};
+\draw (4) node[below] {$4$};
+\draw (5) node[above] {$5$};
+\draw (6) node[below] {$6$};
+\draw (7) node[right] {$7$};
+\end{scope}
+}
+
+\begin{tikzpicture}
+\tikzstyle{every node}=[font=\tiny]
+\matrix[outer sep=0pt,column sep=-0.8cm,row sep=-0.2cm,
+ampersand replacement=\&]
+{
+% row 1
+\&
+\mypentagon
+\draw[->-=0.66,\myboundaryedge,\myedgesize] (5) -- (7);
+\draw (5) node [green,fill,circle,inner sep=1pt] {};
+\draw (7) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\mygray}
+\draw[->-=0.7,\myboundaryedge,\myedgesize] (3) -- (5);
+\draw (3) node [green,fill,circle,inner sep=1pt] {};
+\draw (5) node [red,fill,circle,inner sep=1pt] {};
+ \draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\mygray}
+ 
+\draw[,\myboundaryedge,\myedgesize] (2) -- (3);
+\draw (2) node [green,fill,circle,inner sep=1pt] {};
+\draw (3) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\mygray}
+ \draw[,\myboundaryedge,\myedgesize] (1) -- (2);
+\draw (1) node [green,fill,circle,inner sep=1pt] {};
+\draw (2) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\myyellow}
+\draw[\myboundaryedge,\myedgesize] (0) -- (1);
+\draw (0) node [green,fill,circle,inner sep=1pt] {};
+\draw (1) node [red,fill,circle,inner sep=1pt] {};
+\\
+% row 2
+\mypentagon{\mygray}
+\draw[->-=0.66,\myedgecolor,\myedgesize] (5) -- (6);
+\draw (5) node [green,fill,circle,inner sep=1pt] {};
+\draw (6) node [red,fill,circle,inner sep=1pt] {};
+ \draw[->] (northsource) -- (northtarget);
+  \draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\mygray} 
+
+\draw[->-=0.66,\myedgecolor,\myedgesize] (3) -- (7);
+\draw (3) node [green,fill,circle,inner sep=1pt] {};
+\draw (7) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\mygray}
+ 
+\draw[->-=0.66,\myedgecolor,\myedgesize] (2) to [bend right=60] (5);
+\draw (2) node [green,fill,circle,inner sep=1pt] {};
+\draw (5) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\mygray}
+
+ \draw[->-=0.66,\myedgecolor,\myedgesize] (1) to [bend right=60] (3);
+\draw (1) node [green,fill,circle,inner sep=1pt] {};
+\draw (3) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\myyellow}
+ \draw[->-=0.66,\myedgecolor,\myedgesize] (0) to [bend right=60] (2);
+\draw (0) node [green,fill,circle,inner sep=1pt] {};
+\draw (2) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\&
+\&
+\&
+\&
+ \\
+% row 3
+\&
+  % \draw (-1,0) node {$\cdots$};
+\mypentagon{\myyellow}
+\draw[->-=0.66,\myedgecolor,\myedgesize] (3) to (6);
+\draw (3) node [green,fill,circle,inner sep=1pt] {};
+\draw (6) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+  \&
+  \&
+\mypentagon{\mygray}
+\draw[->-=0.66,\myedgecolor,\myedgesize] (2) to [bend right=30] (7);
+\draw (2) node [green,fill,circle,inner sep=1pt] {};
+\draw (7) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\mygray}
+\draw[->-=0.66,\myedgecolor,\myedgesize] (1) to [bend right=60] (5);
+\draw (1) node [green,fill,circle,inner sep=1pt] {};
+\draw (5) node [red,fill,circle,inner sep=1pt] {};
+
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\myyellow}
+\draw[->-=0.66,\myedgecolor,\myedgesize] (0) to (3);
+\draw (0) node [green,fill,circle,inner sep=1pt] {};
+\draw (3) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\&
+\&
+\&
+\&
+
+\\
+%row 4
+% \draw (-1,0) node {$\cdots$};
+\mypentagon{\myyellow}
+\draw[->-=0.66,\myedgecolor,\myedgesize] (3) to (4);
+\draw (3) node [green,fill,circle,inner sep=1pt] {};
+\draw (4) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\mygray}
+\draw[->-=0.66,\myedgecolor,\myedgesize] (2) to (6);
+\draw (2) node [green,fill,circle,inner sep=1pt] {};
+\draw (6) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\myyellow}
+\draw[->-=0.66,\myedgecolor,\myedgesize] (1) to (7);
+\draw (1) node [green,fill,circle,inner sep=1pt] {};
+\draw (7) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon
+\draw[->-=0.66,\myedgecolor,\myedgesize] (0) to (5);
+\draw (0) node [green,fill,circle,inner sep=1pt] {};
+\draw (5) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\&
+\&
+\\
+%row 5
+\&
+\mypentagon{\myyellow}
+\draw[->-=0.66,\myedgecolor,\myedgesize] (2) to (4);
+\draw (2) node [green,fill,circle,inner sep=1pt] {};
+\draw (4) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\myyellow}
+\draw[->-=0.66,\myedgecolor,\myedgesize] (1) to (6);
+\draw (1) node [green,fill,circle,inner sep=1pt] {};
+\draw (6) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon{\myyellow}
+\draw[->-=0.66,\myedgecolor,\myedgesize] (0) to (7);
+\draw (0) node [green,fill,circle,inner sep=1pt] {};
+\draw (7) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon
+\draw[->-=0.66,\myedgecolor,\myedgesize] (4) to (5);
+\draw (4) node [green,fill,circle,inner sep=1pt] {};
+\draw (5) node [red,fill,circle,inner sep=1pt] {};
+\&
+\&
+\&
+\&
+\\
+% row 6
+\&
+\&
+\mypentagon
+\draw[->-=0.66,\myedgecolor,\myedgesize] (1) to (4);
+\draw (1) node [green,fill,circle,inner sep=1pt] {};
+\draw (4) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon
+\draw[->-=0.66,\myedgecolor,\myedgesize] (0) to [bend left=10] (6);
+\draw (0) node [green,fill,circle,inner sep=1pt] {};
+\draw (6) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+\&
+\&
+\mypentagon
+\draw[->-=0.66,\myedgecolor,\myedgesize] (4) to [bend left=10] (7);
+\draw (4) node [green,fill,circle,inner sep=1pt] {};
+\draw (7) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+\draw[->] (southsource) -- (southtarget);
+  \\
+ % row 7
+\&
+\&
+\&
+\mypentagon
+\draw[->-=0.66,\myboundaryedge,\myedgesize] (0) to [bend right=20] (4);
+\draw (0) node [green,fill,circle,inner sep=1pt] {};
+\draw (4) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+ \&
+ \&
+\mypentagon
+\draw[->-=0.66,\myboundaryedge,\myedgesize] (4) to (6);
+\draw (4) node [green,fill,circle,inner sep=1pt] {};
+\draw (6) node [red,fill,circle,inner sep=1pt] {};
+\draw[->] (northsource) -- (northtarget);
+ \&
+ \&
+\mypentagon
+\draw[\myboundaryedge,\myedgesize] (6) to (7);
+\draw (6) node [green,fill,circle,inner sep=1pt] {};
+\draw (7) node [red,fill,circle,inner sep=1pt] {};
+ \\
+};
+\end{tikzpicture}
+
+
+
+\begin{tikzcd}[row sep=small]%[column sep=small]%[row sep=tiny]
+& \begin{matrix}7 \\6 \end{matrix}  \ar[dr] && \begin{matrix}5 \\4 \end{matrix} \ar[dr] && 3 \ar[dr] && 2  \ar[dr] && 1\\
+6 \ar[ur] \ar[dr] && \begin{smallmatrix}57 \\46 \end{smallmatrix} \ar[ur] \ar[dr] &&  \begin{matrix}35 \\4 \end{matrix} \ar[ur] \ar[dr] && \begin{matrix}2 \\3 \end{matrix} \ar[ur] \ar[dr] && \begin{matrix}1 \\2 \end{matrix} \ar[ur] \\
+& \begin{matrix}5 \\46 \end{matrix} \ar[ur] \ar[dr] && \begin{matrix}357 \\46 \end{matrix} \ar[ur] \ar[dr] && \begin{smallmatrix}2\\&3&&5 \\&&4 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\ 2 \\3 \end{smallmatrix} \ar[ur]  \\
+4 \ar[ur] \ar[dr] && \begin{matrix}35 \\46 \end{matrix} \ar[ur]\ar[dr] && \begin{smallmatrix}2\\&3&&5&&7 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\2\\&3&&5 \\&&4 \end{smallmatrix} \ar[ur] \ar[dr] \\
+& \begin{matrix}3 \\4 \end{matrix} \ar[ur] \ar[dr] && \begin{smallmatrix}2\\&3&&5 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\2\\&3&&5&&7 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && 5\\
+&& \begin{smallmatrix}2\\3 \\4 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\2\\&3&&5 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{matrix}57 \\6 \end{matrix} \ar[ur] \ar[dr]\\
+&&& \begin{smallmatrix}1\\2 \\ 3 \\4 \end{smallmatrix} \ar[ur]  && \begin{matrix}5 \\6 \end{matrix} \ar[ur] && 7\\
+\end{tikzcd}
+
+
+
+
+\end{document}
