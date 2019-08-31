@@ -3,7 +3,7 @@
 \usepackage{tikz, tikz-cd}
 
 \usepackage[letterpaper]{geometry}
-\geometry{tmargin=1.0in,bmargin=0.2in,lmargin=0.30in,rmargin=0.30in}
+\geometry{tmargin=1.0in,bmargin=0.2in,lmargin=0.20in,rmargin=0.20in}
 \voffset -0.6in
 
 \usetikzlibrary{matrix,arrows,calc,shapes}
@@ -19,6 +19,7 @@
 \date{August 2019}
 
 \begin{document}
+\thispagestyle{empty}
 % \centering
 
 \input{figquiver6}
@@ -315,14 +316,21 @@ ampersand replacement=\&]
 
 
 
-\begin{tikzcd}[row sep=small]%[column sep=small]%[row sep=tiny]
-& \begin{matrix}7 \\6 \end{matrix}  \ar[dr] && \begin{matrix}5 \\4 \end{matrix} \ar[dr] && 3 \ar[dr] && 2  \ar[dr] && 1\\
-6 \ar[ur] \ar[dr] && \begin{smallmatrix}57 \\46 \end{smallmatrix} \ar[ur] \ar[dr] &&  \begin{matrix}35 \\4 \end{matrix} \ar[ur] \ar[dr] && \begin{matrix}2 \\3 \end{matrix} \ar[ur] \ar[dr] && \begin{matrix}1 \\2 \end{matrix} \ar[ur] \\
-& \begin{matrix}5 \\46 \end{matrix} \ar[ur] \ar[dr] && \begin{matrix}357 \\46 \end{matrix} \ar[ur] \ar[dr] && \begin{smallmatrix}2\\&3&&5 \\&&4 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\ 2 \\3 \end{smallmatrix} \ar[ur]  \\
-4 \ar[ur] \ar[dr] && \begin{matrix}35 \\46 \end{matrix} \ar[ur]\ar[dr] && \begin{smallmatrix}2\\&3&&5&&7 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\2\\&3&&5 \\&&4 \end{smallmatrix} \ar[ur] \ar[dr] \\
-& \begin{matrix}3 \\4 \end{matrix} \ar[ur] \ar[dr] && \begin{smallmatrix}2\\&3&&5 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\2\\&3&&5&&7 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && 5\\
-&& \begin{smallmatrix}2\\3 \\4 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\2\\&3&&5 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{matrix}57 \\6 \end{matrix} \ar[ur] \ar[dr]\\
-&&& \begin{smallmatrix}1\\2 \\ 3 \\4 \end{smallmatrix} \ar[ur]  && \begin{matrix}5 \\6 \end{matrix} \ar[ur] && 7\\
+\begin{tikzcd}[row sep=small,column sep=tiny]%[column sep=small]%[row sep=tiny]
+% row 1
+& P_7= \begin{matrix}7 \\6 \end{matrix}  \ar[dr] && \begin{matrix}5 \\4 \end{matrix} \ar[dr] && 3 \ar[dr] && 2  \ar[dr] && 1=I_1\\ 
+% row 2
+P_6=6 \ar[ur] \ar[dr] && \begin{smallmatrix}57 \\46 \end{smallmatrix} \ar[ur] \ar[dr] &&  \begin{matrix}35 \\4 \end{matrix} \ar[ur] \ar[dr] && \begin{matrix}2 \\3 \end{matrix} \ar[ur] \ar[dr] && \begin{matrix}1 \\2 \end{matrix} \ar[ur]=I_2 \\
+% row 3
+& P_5= \begin{matrix}5 \\46 \end{matrix} \ar[ur] \ar[dr] && \begin{matrix}357 \\46 \end{matrix} \ar[ur] \ar[dr] && \begin{smallmatrix}2\\&3&&5 \\&&4 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\ 2 \\3 \end{smallmatrix} = I_3 \ar[ur]  \\
+% row 4
+P_4=4 \ar[ur] \ar[dr] && \begin{matrix}35 \\46 \end{matrix} \ar[ur]\ar[dr] && \begin{smallmatrix}2\\&3&&5&&7 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\2\\&3&&5 \\&&4 \end{smallmatrix} = I_4 \ar[ur] \ar[dr] \\
+% row 5
+& P_3=\begin{matrix}3 \\4 \end{matrix} \ar[ur] \ar[dr] && \begin{smallmatrix}2\\&3&&5 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\2\\&3&&5&&7 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && 5 = I_5\\
+% row 6
+&& P_2=\begin{smallmatrix}2\\&3 \\&&4 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{smallmatrix}1\\2\\&3&&5 \\&&4&&6 \end{smallmatrix} \ar[ur] \ar[dr] && \begin{matrix}57 \\6 = I_6 \end{matrix} \ar[ur] \ar[dr]\\
+% row 7
+&&& P_1=\begin{smallmatrix}1\\&2 \\ &&3 \\&&&4 \end{smallmatrix} \ar[ur]  && \begin{matrix}5 \\6 \end{matrix} \ar[ur] && 7 = I_7\\
 \end{tikzcd}
 
 
